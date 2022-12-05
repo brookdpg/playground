@@ -58,5 +58,5 @@ def backtest_options(options):
   
   
   function netReturn = calculateNetReturn(data) 
-  % Calculate the net return for each period netReturn = diff(data)./data(1:end-1); 
+  % Calculate the net return for each period                    netReturn = diff(data)./data(1:end-1); 
   end
