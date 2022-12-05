@@ -1,0 +1,60 @@
+apiVersion: batch/v1beta1
+kind: CronJob
+metadata:
+name: ({ •Values.name }] # Name of Model Driver (ex. ibolt-model-driver)
+labels:
+app: (t •Values.name }) # Name of Model Driver (ex. ibolt-model-driver)
+chart: ({ .Chart.Name })-(t .Chart.Version | replace "+" " " }) # Helm Chart Name and Version (e
+release: ({ .Release.Name }) # Name of Model Driver (ex. ibolt-model-driver)
+heritage: ({ •Release.Service }} # Helm
+k8s-app: ( .Values.name 1] # NanN of Model Driver (ex. ibolt-model-driver)
+spec:
+schedule: "({ •Values.cron.schedule }]" # Cron Schedule we defined in values. Yaml
+jobTemplate: # Because it is a CronJob, we create jobTemplate that it runs every job with
+spec:
+tt1SecondsAfterFinished: 259200
+template: # The template for each job
+metadata:
+annotations:
+sidecar.istio.io/inject:
+"false" # We do not need istio, so set to false
+iam.amazonaws.com/role: ASVASVSBCARDCREDITINFRASTRUCTURE/CapOne-SPR-SBC-Credit-Infrastructure-
+labels:
+app: (‡ .Values.name }} # Name of Model Driver (ex. ibolt-model-driver)
+release: {{ .Release.Name }} # Name of Model Driver (ex. ibolt-model-driver)
+k8s-app: ({ •Values.name }} # Name of Model Driver (ex. ibolt-model-driver)
+spec:
+securityContext:
+runAsUser: 1000 # Never run a container/pod as root user for security
+restartPolicy: Never # This can be modified, but for the sake of run (once) for each schedule, it is
+containers: # Define all the necessary configurations for each container/pod that comes up
+- name: {{ .Values.name }} # Name of Model Driver (ex. ibolt-model-driver)
+image:
+"{{-Values-image, repository}}: ((.Values.image.tag}]" # Skaffold will overwrite this value .
+imagePullPolicy: IfNotPresent # If Image is not present, pull it from artifactory
+securityContext:
+allowPrivilegeEscalation: false # Do not let appuser escalate permissions to root for security
+envFrom:
+- configMapRef: # Visit sbc-credit-infrastructure-rubie repo for more info
+name: aws-proxy # Provide environment variables (especially proxies) for the container
+resources:
+limits:
+ephemeral-storage: 8G # Set up storage limits for this pod
+cpu: 3 # Set up cpu limits for this pod
+memory: 60G # Set up memory limits for this pod
+requests:
+ephemeral-storage: 8G # Set up storage requests for this pod
+cpu: 3 # Set up cpu requests for this pod
+memory: 60G # Set up memory requests for this pod
+volumeMounts: # Visit sbc-credit-infrastructure-rubie repo for more info
+- name: lockbox-files # Mount lockbox.properties which is. requried by bas
+  mountPath:/app/lockbox.properties
+  subPath: lockbox.properties
+name: lockbox-files # Mount secrets.yaml which is requried by base image
+mountPath:/app/secrets.yami
+subPath: secrets.yaml
+volumes:
+# Visit sbc-credit-infrastructure-rubie repo for more info regarding
+- name: lockbox-files # Mount the files defined in lockbox-config configmap t
+configMap:
+name: lockbox-config
