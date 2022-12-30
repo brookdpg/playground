@@ -15,7 +15,30 @@ net_returns = lag_array ./ array - 1;
 
 end
 
+%Define the parameters of the backtesting
+startDate = '1-Jan-2013';
+endDate = '31-Dec-2013';
 
+% Load the data
+[dates, prices] = loadData(startDate, endDate);
+
+% Initialize the portfolio
+portfolio = zeros(length(dates), 1);
+
+%Loop through each day in the dates range
+for dayIdx = 1:length(dates)
+    % Get the current day's price
+    currPrice = prices(dayIdx);
+    
+    % Calculate the profit/loss from the options
+    profitLoss = calcOptionPL(currPrice, portfolio(dayIdx));
+    
+    % Update the portfolio
+    portfolio(dayIdx) = portfolio(dayIdx) + profitLoss; 
+end
+
+% Plot the results
+plot(dates, portfolio);
 
 
 
