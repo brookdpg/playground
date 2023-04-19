@@ -1,0 +1,19 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: my-gui-app
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: my-gui-app
+  template:
+    metadata:
+      labels:
+        app: my-gui-app
+    spec:
+      containers:
+      - name: my-gui-container
+        image: your-gui-image:tag
+        command: ["/bin/bash", "-c", "your-gui-command"]
+        # Add any necessary environment variables or volume mounts here
