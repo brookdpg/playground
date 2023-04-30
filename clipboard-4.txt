@@ -1,0 +1,8 @@
+source /opt/ros/<your_ros_distro>/setup.bash
+mkdir -p ~/zenoh_ws/src
+cd ~/zenoh_ws/src
+git clone https://github.com/eclipse-zenoh/zenoh-plugin-dds.git
+cd ..
+rosdep install --from-paths src --ignore-src -r -y
+colcon build --symlink-install
+source ~/zenoh_ws/install/setup.bash
